@@ -593,9 +593,9 @@ fn main() {
         panic!("precompiled BoringSSL was provided, optional patches can't be applied to it");
     }
 
-    if bssl_dir.is_ok() && cfg!(feature = "fips") {
-        panic!("precompiled BoringSSL was provided, so FIPS configuration can't be applied");
-    }
+    // if bssl_dir.is_ok() && cfg!(feature = "fips") {
+    //     panic!("precompiled BoringSSL was provided, so FIPS configuration can't be applied");
+    // }
 
     let bssl_dir = bssl_dir.unwrap_or_else(|_| build_boring_from_sources());
 
