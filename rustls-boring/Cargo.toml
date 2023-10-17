@@ -1,0 +1,63 @@
+
+[package]
+name = "rustls-boring"
+version = { workspace = true }
+authors = ["Steven Fackler <sfackler@gmail.com>", "Ivan Nikulin <ifaaan@gmail.com>"]
+edition = { workspace = true }
+description = "RustTLS support via BoringSSL"
+license = "MIT/Apache-2.0"
+repository = { workspace = true }
+documentation = "https://docs.rs/rustls-boring"
+readme = "README.md"
+exclude = ["test/*"]
+
+[package.metadata.docs.rs]
+features = ["rpk", "pq-experimental"]
+rustdoc-args = ["--cfg", "docsrs"]
+
+[features]
+default = []
+# Use a FIPS-validated version of boringssl.
+fips = ["boring/fips"]
+
+# Link with precompiled FIPS-validated `bcm.o` module.
+fips-link-precompiled = ["boring/fips-link-precompiled"]
+
+# Enables Raw public key API (https://datatracker.ietf.org/doc/html/rfc7250)
+rpk = ["boring/rpk"]
+
+# Enables experimental post-quantum crypto (https://blog.cloudflare.com/post-quantum-for-all/)
+pq-experimental = ["boring/pq-experimental"]
+
+# Disables git patching of the BoringSSL sources for features like `rpk` and `pq-experimental`, but
+# keeps the related Rust API.
+#
+# Supposed to be used with either pre-compiled BoringSSL (via `BORING_BSSL_PATH` env variable) or
+# with custom BoringSSL sources (via `BORING_BSSL_SOURCE_PATH` env variable) already containing
+# required patches.
+no-patches = ["boring/no-patches"]
+
+
+[dependencies]
+rustls = { workspace = true, default-features = false, features = ["logging", "tls12"] }
+antidote = { workspace = true }
+linked_hash_set = { workspace = true }
+once_cell = { workspace = true }
+boring = { workspace = true }
+tokio = { workspace = true }
+tokio-boring = { workspace = true }
+chacha20poly1305 = "0.10.0"
+der = "0.7.0"
+env_logger = "0.10"
+hmac = "0.12.0"
+pki-types = { package = "rustls-pki-types", version = "0.2.0" }
+rand_core = "0.6.0"
+rsa = { version = "0.9.0", features = ["sha2"] }
+sha2 = "0.10.0"
+webpki = { package = "rustls-webpki", version = "0.102.0-alpha.1", default-features = false, features = ["alloc", "std"] }
+webpki-roots = "0.26.0-alpha.1"
+x25519-dalek = "2"
+
+[dev-dependencies]
+tokio = { workspace = true }
+futures = { workspace = true }
