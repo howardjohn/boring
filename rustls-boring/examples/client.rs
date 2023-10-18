@@ -1,3 +1,4 @@
+
 use std::io::{stdout, Read, Write};
 use std::net::TcpStream;
 use std::sync::Arc;
@@ -24,7 +25,10 @@ fn main() {
     let server_name = "www.rust-lang.org".try_into().unwrap();
     let mut conn = rustls::ClientConnection::new(Arc::new(config), server_name).unwrap();
     let mut sock = TcpStream::connect("www.rust-lang.org:443").unwrap();
+
+    writeln!(&mut std::io::stderr(), "connected tcp").unwrap();
     let mut tls = rustls::Stream::new(&mut conn, &mut sock);
+    writeln!(&mut std::io::stderr(), "connected tls").unwrap();
     tls.write_all(
         concat!(
             "GET / HTTP/1.1\r\n",
@@ -36,6 +40,7 @@ fn main() {
         .as_bytes(),
     )
     .unwrap();
+    writeln!(&mut std::io::stderr(), "wrote tls").unwrap();
     let ciphersuite = tls
         .conn
         .negotiated_cipher_suite()

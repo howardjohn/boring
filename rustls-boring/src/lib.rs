@@ -29,32 +29,17 @@ impl rustls::crypto::CryptoProvider for Provider {
 }
 
 static ALL_CIPHER_SUITES: &[rustls::SupportedCipherSuite] = &[
-    TLS_AES_128_GCM_SHA256,
+    TLS_RSA_WITH_AES_128_GCM_SHA256,
 ];
 
-pub static TLS_AES_128_GCM_SHA256: rustls::SupportedCipherSuite =
+pub static TLS_RSA_WITH_AES_128_GCM_SHA256: rustls::SupportedCipherSuite =
     rustls::SupportedCipherSuite::Tls13(&rustls::Tls13CipherSuite {
         common: rustls::cipher_suite::CipherSuiteCommon {
-            suite: rustls::CipherSuite::TLS_AES_128_GCM_SHA256,
+            suite: rustls::CipherSuite::TLS_RSA_WITH_AES_128_GCM_SHA256,
             hash_provider: &hash::Sha256,
         },
         hmac_provider: &hmac::Sha256Hmac,
-        aead_alg: &aead::Chacha20Poly1305,
-    });
-
-pub static TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256: rustls::SupportedCipherSuite =
-    rustls::SupportedCipherSuite::Tls12(&rustls::Tls12CipherSuite {
-        common: rustls::cipher_suite::CipherSuiteCommon {
-            suite: rustls::CipherSuite::TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
-            hash_provider: &hash::Sha256,
-        },
-        kx: rustls::crypto::KeyExchangeAlgorithm::ECDHE,
-        sign: &[
-            rustls::SignatureScheme::RSA_PSS_SHA256,
-            rustls::SignatureScheme::RSA_PKCS1_SHA256,
-        ],
-        hmac_provider: &hmac::Sha256Hmac,
-        aead_alg: &aead::Chacha20Poly1305,
+        aead_alg: &aead::Aes128GcmAead,
     });
 
 pub fn certificate_verifier(
