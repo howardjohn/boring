@@ -6,6 +6,7 @@ pub struct Sha256Hmac;
 
 impl crypto::hmac::Hmac for Sha256Hmac {
     fn with_key(&self, key: &[u8]) -> Box<dyn crypto::hmac::Key> {
+        boring::nid::Nid::HMACWITHSHA224.
         Box::new(Sha256HmacKey(Hmac::<Sha256>::new_from_slice(key).unwrap()))
     }
 

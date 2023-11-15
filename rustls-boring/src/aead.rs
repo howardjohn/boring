@@ -9,14 +9,17 @@ pub struct Aes128GcmAead;
 
 impl cipher::Tls13AeadAlgorithm for Aes128GcmAead {
     fn encrypter(&self, key: cipher::AeadKey, iv: cipher::Iv) -> Box<dyn cipher::MessageEncrypter> {
+        panic!("");
         Box::new(Tls13Cipher(key, iv))
     }
 
     fn decrypter(&self, key: cipher::AeadKey, iv: cipher::Iv) -> Box<dyn cipher::MessageDecrypter> {
+        panic!("");
         Box::new(Tls13Cipher(key, iv))
     }
 
     fn key_len(&self) -> usize {
+        panic!("");
         Cipher::aes_128_gcm().key_len()
     }
 
@@ -37,7 +40,7 @@ impl cipher::MessageEncrypter for Tls13Cipher {
         m: cipher::BorrowedPlainMessage,
         seq: u64,
     ) -> Result<cipher::OpaqueMessage, rustls::Error> {
-
+        panic!("");
         // Is 16 bytes overhead correct here?
         let total_len = m.payload.len() + 1 + CHACHAPOLY1305_OVERHEAD;
 
@@ -49,6 +52,7 @@ impl cipher::MessageEncrypter for Tls13Cipher {
         let nonce = chacha20poly1305::Nonce::from(cipher::Nonce::new(&self.1, seq).0);
         let aad = cipher::make_tls13_aad(total_len);
         let mut actual_tag = [0; 16];
+        println!("encrypt1");
         match boring::symm::encrypt_aead(
             Cipher::aes_128_gcm(),
             self.0.as_ref(),
@@ -69,6 +73,7 @@ impl cipher::MessageDecrypter for Tls13Cipher {
         mut m: cipher::OpaqueMessage,
         seq: u64,
     ) -> Result<cipher::PlainMessage, rustls::Error> {
+        panic!("");
         let payload = m.payload_mut();
         let tag_size: usize = 16;
         if payload.len() < tag_size {
